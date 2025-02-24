@@ -1,5 +1,5 @@
 ---
-
+import "../styles/global.css";
 const { title = "Tanaz Blog" } = Astro.props;
 ---
 
@@ -9,7 +9,6 @@ const { title = "Tanaz Blog" } = Astro.props;
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="stylesheet" href="/src/styles/global.css" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
 	</head>
@@ -22,7 +21,7 @@ const { title = "Tanaz Blog" } = Astro.props;
 		
 		</header>
 		<main class="flex-1 h-full"><slot /></main>
-	<footer class="border-t-2 flex justify-end items-center gap-x-1 ml-auto text-xs p-1 text-end w-full"><a href="https://github.com/thetanaz" target="_blank"><img src="/src/assets/github-mark.svg" class="w-5 h-5" alt="github logo" /></a><a href="https://tanaz.dev" target="_blank"><small>Atanas Atanasov &copy; 2025</small></a></footer>
+	<footer class="border-t-2 flex justify-end items-center gap-x-1 ml-auto text-xs p-1 text-end w-full"><a href="https://github.com/thetanaz" target="_blank"><img src="/github-mark.svg" class="w-5 h-5" alt="github logo" /></a><a href="https://tanaz.dev" target="_blank"><small>Atanas Atanasov &copy; 2025</small></a></footer>
 	</body>
 </html>
 
