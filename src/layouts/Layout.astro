@@ -1,22 +1,28 @@
+---
+
+const { title = "Tanaz Blog" } = Astro.props;
+---
+
 <!doctype html>
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="stylesheet" href="/src/styles/global.css" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<title>{title}</title>
 	</head>
-	<body>
-		<slot />
+	
+	<body class="flex flex-col max-w-[1200px] min-h-[95vh] mx-auto md:my-2 my-0 bg-[#f4f0e8] border-2">
+		<header class="p-6 w-full font-[Playfair] border-b-2">
+			<a href="/" class="mx-auto items-center flex flex-col">	<h1 class="lg:text-9xl md:text-7xl text-6xl font-extrabold ">TANAZBLOG</h1>
+
+				<h2 class="text-2xl md:text-4xl font-extralight">Tech <span class="font-extrabold text-3xl">·</span> Gaming <span class="font-extrabold text-3xl">·</span> Life</h2></a>
+		
+		</header>
+		<main class="flex-1 h-full"><slot /></main>
+	<footer class="border-t-2 flex justify-end items-center gap-x-1 ml-auto text-xs p-1 text-end w-full"><a href="https://github.com/thetanaz" target="_blank"><img src="/src/assets/github-mark.svg" class="w-5 h-5" alt="github logo" /></a><a href="https://tanaz.dev" target="_blank"><small>Atanas Atanasov &copy; 2025</small></a></footer>
 	</body>
 </html>
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>

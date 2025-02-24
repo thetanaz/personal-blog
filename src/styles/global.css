@@ -1,0 +1,13 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+@font-face {
+  font-family: "Playfair";
+  src: url("../assets/fonts/playfair.ttf") format("ttf");
+  font-weight: 900;
+}
+
+@font-face {
+  font-family: "PlayfairItalic";
+  src: url("../assets/fonts/playfair-italic.ttf") format("ttf");
+  font-weight: 700;
+}

@@ -1,11 +1,86 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+// Define types for blog posts
+type BlogPost = CollectionEntry<'blog'>;
+type BlogPostGroup = BlogPost[];
+
+// Helper function to chunk array into groups with proper typing
+function chunkArray(array: BlogPost[], sizes: number[]): BlogPostGroup[] {
+  const chunks: BlogPostGroup[] = [];
+  let index = 0;
+ 
+  while (index < array.length) {
+    const size = sizes[chunks.length % sizes.length];
+    chunks.push(array.slice(index, index + size));
+    index += size;
+  }
+ 
+  return chunks;
+}
+
+// Fetch and process blog posts
+const posts = (await getCollection("blog")).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime()
+);
+const { Content: FirstPostContent } = await posts[0].render();
+
+// Chunk remaining posts into alternating groups of 3 and 2
+const remainingPosts = posts.slice(1);
+const postGroups = chunkArray(remainingPosts, [3, 2]);
 ---
 
 <Layout>
-	<Welcome />
+  <!-- Featured post -->
+  <a href={`/blog/${posts[0].slug}`} class="border-b-4 md:grid flex flex-col md:grid-cols-2">
+    <div class="col-span-1 gap-y-1 flex flex-col border-b order-2 md:order-none md:border-b-0 md:border-r p-3">
+      <h2 class="text-2xl font-[Playfair] md:text-4xl font-bold">{posts[0].data.title}</h2>
+      <h3 class="text-sm text-gray-500">{posts[0].data.date.toLocaleDateString("bg-BG")}</h3>
+      <p>{posts[0].data.description}......</p>
+    </div>
+    <div class="col-span-1 mx-auto m-auto p-3">
+      <img src={posts[0].data.image} alt="image" />
+    </div>
+  </a>
+
+  <!-- Remaining posts in alternating layouts -->
+  <div>
+    {postGroups.map((group: BlogPostGroup, groupIndex: number) => {
+      const isThreeCol = groupIndex % 2 === 0;
+      const isLastGroup = groupIndex === postGroups.length - 1;
+      const isSingleItemLastGroup = isLastGroup && group.length === 1;
+      
+      return (
+        <div class={`flex flex-col md:grid w-full divide-x  ${
+          isSingleItemLastGroup 
+            ? 'md:grid-cols-1' 
+            : isThreeCol 
+              ? 'md:grid-cols-3' 
+              : 'md:grid-cols-2'
+        }`}>
+          {group.map((post: BlogPost) => (
+            <a
+              href={`/blog/${post.slug}`}
+              class={`p-4 hover:shadow-lg flex flex-col transition-shadow ${
+                isSingleItemLastGroup ? 'md:max-w-4xl md:mx-auto md:w-full' : ''
+              }`}
+            >
+              <div class="aspect-video mb-4">
+                <img
+                  src="https://images.squarespace-cdn.com/content/v1/554070c6e4b0748aa30c4031/1683105466410-6BC9B4Q7YCTVR7N1J79R/african-elephant-common-zebras-nature-wildlife-photography-james-warwick-bw.jpg"
+                  alt="Post thumbnail"
+                  class="w-full h-full object-cover"
+                />
+              </div>
+              <h3 class="text-xl font-semibold mb-2 font-[Playfair]">{post.data.title}</h3>
+              {post.data.description && <p>{post.data.description.slice(0,100)}...</p>}
+              <time class="text-gray-600">{post.data.date.toLocaleDateString("bg-BG")}</time>
+            </a>
+          ))}
+        </div>
+      );
+    })}
+  </div>
 </Layout>
